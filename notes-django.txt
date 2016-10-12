@@ -1,0 +1,107 @@
+sprint 1
+	layout do projeto, baseado no bootstrap
+	- pagina inicial
+	- contato
+	- pagina de listar produtos
+	- pagina de um produto específico
+
+# documentação do django
+https://docs.djangoproject.com/en/1.10/
+
+# template do bootstrap usado neste projeto
+http://bootswatch.com/flatly/
+
+# reporitório de pacotes django
+https://djangopackages.org/
+
+# github do djangoproject
+https://github.com/django/django
+
+# site do pypi
+https://pypi.python.org/pypi
+
+# adicionar reporitório do python3.5
+sudo add-apt-repository ppa:fkrull/deadsnakes
+
+# como instalar virtualenv no python3.5
+sudo apt-get install python-virtualenv
+
+# criando o ambiente virtual
+# venv é o nome da pasta que vai criar
+# -p é a versão do python que vai ser instalado no ambiente virtual
+virtualenv venv -p python3.5
+
+# ativando o ambiente virtual, com python3.5 por padrão
+source venv/bin/activate
+
+# instalando django 1.9 no ambiente virtual
+pip install django==1.9
+	Successfully installed django-1.9
+	(venv)
+
+# upgrading django to version 1.9.5
+pip install -U django==1.9.5
+
+# criando o projeto djangoecommerce no diretório atual
+django-admin startproject djangoecommerce .
+
+# arquivo base do meu projeto
+# é nele que vou rodar todos os comandos django:
+	# rodar o servidor
+	# atualizar o banco de dados...etc
+manage.py
+# levantando o servidor
+./manage.py runserver
+./manage.py runserver 0.0.0.0:8000 # se eu tiver usando uma VM
+
+====================================================
+====================================================
+# Aula 6 - primeira app django
+
+# PRIMEIRAS CONFIGURAÇÕES
+settings.py
+# arquivo com as configuraões gerais do django
+	banco de dados, configuraões de envio de e-mail, arquivos estáticos, templates.......etc
+
+
+# BASE_DIR armazena o diretório raiz do projeto
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+	# caminho absoluto do arquivo
+	os.path.abspath(__file__)
+
+	# diretório onde está o settings
+	os.path.dirname()
+
+# altera locale de:
+# posso ter mais de um idioma no projeto, com locale
+LANGUAGE_CODE = 'pt-br'
+
+# altera o timezone para:
+TIME_ZONE = 'America/Sao_Paulo'
+
+# CRIANDO MINHA PRIMEIRA APP DJANGO
+./manage.py startapp core
+	# startapp cria uma aplicação e cria os requisitos mínimos para essa aplicação
+	# na app core é onde se coloca as coisas básicas que serão usadas pelas outras apps do meu projeto
+
+# DIZENDO AO DJANGO QUE EXISTE A APP core NO MEU SISTEMA
+# em settings.py
+INSTALLED_APPS = [
+	'core',
+]
+
+# altera o arquivo core/views.py
+	# insere as linhas:
+# coding=utf-8
+
+# sempre que eu precisar criar uma url, eu tenho que ter uma view associada à ela
+
+# o django consiste em mapeamento (com regex) de urls em funções, que são as views
+
+# edita urls.py
+urlpatterns = [
+    url(r'^$'), # r indica que é uma string regex '^$' indica que é a url mãe
+    url(r'^admin/', admin.site.urls),
+]
+====================================================
+====================================================
