@@ -272,5 +272,10 @@ $ python --version > runtime.txt
 # crio o arquivo Procfile com o conteúdo:
 - assim o vai rodar o runserver, no heroku, como se tivesse em desenvolvimento
 web: python manage.py runserver 0.0.0.0:$PORT
+
+
+$ git commit -am "primeiro deploy no heroku"
+$ git push heroku master 
+
 ====================================================
 ====================================================
