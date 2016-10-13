@@ -105,3 +105,172 @@ urlpatterns = [
 ]
 ====================================================
 ====================================================
+AULA 7 - Sistema de templates(Template tags, Variáveis e filtros)
+settings.py
+	TEMPLATES = [
+		'DIRS': [], # é uma lista de diretórios onde eu vou encontrar os meus templates
+					- templates pode ser uma página html, txt, qualquer arquivo de texto com marcação
+
+		'APP_DIRS': True, # vou procurar templates dentro de uma pasta chamada templates que está dentro de cada aplicação
+
+# crio a pasta templates dentro de core
+$ mkdir core/templates
+# estou dizendo ao django para procurar templates dentro de core/templates
+
+# crio index.html
+$ touch core/templates/index.html
+
+# marcação especial django templates
+variáveis
+{{ title }} # vai carregar o valor de title, que vem de um context
+- context  é um dicionário com chave e valor, declarado na view
+
+- tem também marcação especial de templates tags
+- templates tags vão alterar o fluxo da minha página
+ex: eu tenho uma lista de produtos, faço um for para iterar sobre esta lista de produtos
+
+- filtros, servem para formatar a minha saída
+
+
+====================================================
+====================================================
+AULA 8 - trabalhando com arquivos estáticos
+settings.py
+INSTALLED_APPS = [
+	# como o django serve arquivos estáticos:
+	- o django procura uma pasta chamada static dentro de cada app
+	'django.contrib.staticfiles',
+]
+
+settings.py
+# o caminho d arquivo estático
+STATIC_URL = '/static/'
+====================================================
+# pode-se criar também uma pasta de arquivos estáticos  global para o projeto:
+settings.py
+STATICFILES_DIRS = [  # que é uma lista de diretórios alternativos
+	os.path.join(BASE_DIR, 'staticfiles') # staticfiles é a pasta global na raiz do projeto
+]
+
+O django só serve arquivo estático se:
+- 'django.contrib.staticfiles', # tiver ativa
+- ./manage.py runserver         # rodar o projeto com o runserver
+- DEBUG = True                  # estar em modo debug
+====================================================
+# indicando a url dos arquivos estáticos, carregando os arquivos estáticos
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'assets/bootstrap.min.css' %}" media="screen" />
+<link rel="stylesheet" href="{% static 'assets/custom.min.css' %}" media="screen" />
+<script src="{% static 'assets/bootstrap.min.js' %}"></script>
+====================================================
+====================================================
+AULA 9 - Criando templates com herança
+- copio todo o conteúdo de /core/templates/index.html para:
+	- /core/templates/base.html
+- removo o miolo do /core/templates/base.html
+====================================================
+abro /core/templates/index.html
+- ctrl+x em todo o conteúdo do arquivo
+
+- insiro esta linha no arquivo /core/index.html
+{% extends "base.html" %}
+estou indicando que ele deve herdar do templates base.html e ele deve preencher somente oa blocos que o base.html definiu
+====================================================
+- em base.html 
+aqui é um possível local  onde eu posso criar html nos filhos
+
+<title>{% block title %}Django E-Commerce{% endblock %}</title>
+{% block container %}{% endblock %}
+====================================================
+- em index.html
+
+
+====================================================
+urls.py
+- é boa prática sempre nomear as urls para poder chamar as urls depois em qualquer lugar do projeto
+
+- segue exemplo e nomes e uso dos nomes:
+em urls.py
+urlpatterns = [
+    url(r'^$', views.index, name='index'),
+    url(r'^contato/$', views.contact, name='contact'),
+    url(r'^produto/$', views.product, name='product'),
+    url(r'^produtos/$', views.product_list, name='product_list'),
+    url(r'^admin/', admin.site.urls),
+]
+
+em base.html
+<a href="{% url 'contact' %}">Contato</a>
+====================================================
+====================================================
+AULA 10 - adicionando os primeiros testes
+from django.test import TestCase, Client
+TestCase é a classe que representa um teste unitário
+Client simula o navegador. nos testes
+
+test_views.py
+
+
+class IndexViewTestCase(TestCase):
+	pass
+
+Teste classe IndexViewTestCase que herda de TestCase
+- no miolo da classe eu escrevo os métodos dessa classe que vão representar um teste específico
+
+- quero saber se a view index está retorno o código HTTP 200
+def test_status_code(self):
+====================================================
+====================================================
+AULA 11 - Deply do sistema no Heroku
+- no terminal na miha máquina
+$ heroku login
+Logged in as josuerodrigues@gmail.com
+
+criando chave ssh
+$ ssh-keygen -t rsa -C "josuerodrigues@gmail.com"
+
+verificando minha chave ssh puvlic
+$ cat ~/.ssh/id_rsa.pub
+
+adicionando minha chave ~/.ssh/id_rsa.pub ao heroku
+$ heroku keys:add
+
+- adicionando a url git que o heroku me forneceu
+- o git permite que o meu repositório local esteja no linkado ao github, herokue mais outros repositórios externos
+- linkando  este repositório com o heroku
+$ git remote add heroku https://git.heroku.com/djangoe-commerce.git
+
+- verificando
+$ git remote -v
+heroku	https://git.heroku.com/djangoe-commerce.git (fetch)
+heroku	https://git.heroku.com/djangoe-commerce.git (push)
+
+libs que precisam ser instaladas antes de fazer o deploy no heroku
+$ pip install dj-database-url==0.4.1
+$ pip install gunicorn==19.4.5
+$ pip install -U django==1.9.6
+$ pip install psycopg2==2.6.1
+
+
+djangoecommerce/settings.py
+import os
+import dj_database_url
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+- a diferença entre BASE_DIR e o PROJECT_ROOT é que BASE_DIR é relatico ao diretório raiz
+- o PROJECT_ROOT é na pasta settings
+
+
+# gerar um arquivo com as libs que estão instaladas no meu virtualenv
+$ pip freeze > requirements.txt
+
+# crio o arquivo runtime.txt com a versão do python instalado
+$ python --version > runtime.txt
+
+# crio o arquivo Procfile com o conteúdo:
+- assim o vai rodar o runserver, no heroku, como se tivesse em desenvolvimento
+web: python manage.py runserver 0.0.0.0:$PORT
+====================================================
+====================================================
