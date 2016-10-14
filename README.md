@@ -16,5 +16,5 @@ https://github.com/Josue23/djangoecommerce.git
 
 
 ### Instale as dependencias
-  ###### pip install -r requirements.txt
-  ###### python manage.py runserver
+  <p>pip install -r requirements.txt</p>
+  <p>python manage.py runserver</p>
