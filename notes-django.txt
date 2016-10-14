@@ -518,3 +518,45 @@ category(request, 'design')
 url(r'^(?P<slug>[\w_-]+)/$'
 	na prática, o django vai chamar:
 category(request, slug='design')
+
+
+====================================================
+====================================================
+aula24-testando-app-catalogo
+
+model-mommy.readthedocs.io/en/latest
+
+$ pip install model_mommy
+facilita muito pra eu manipular os testes adicionando modelos, conteúdos a mais no meu teste
+
+removo o arquivo:
+catalog/tests.py
+
+crio a pasta:
+catalog/tests/
+
+crio os arquivos:
+catalog/tests/__init__.py
+catalog/tests/test_models.py
+catalog/tests/test_views.py
+
+
+$ ./manage.py test
+
+# roda somente os testes da app catalog
+$ ./manage.py test catalog
+
+====================================================
+====================================================
+
+aula25-deploy-da-app-catalog
+
+é melhor rodar com o gunicorn no heroku
+
+lib para servir arquivos estáticos
+$ pip install whitenoise==3.2
+
+
+
+====================================================
+====================================================
