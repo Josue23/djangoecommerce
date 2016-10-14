@@ -6,7 +6,7 @@ https://github.com/Josue23/djangoecommerce.git
 ###### cd djangoecommerce
 
 ### virtualenv
-    <p>virtualenv env -p python3</p>
+    virtualenv env -p python3
 
 ###### Linux
     source env/bin/activate
