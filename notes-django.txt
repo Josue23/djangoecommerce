@@ -493,3 +493,28 @@ vamos usar url include, separar as urls por módulo
 catalog/urls.py
 
 
+
+
+====================================================
+====================================================
+aula22-listando-os-produtos-de-uma-categoria
+
+
+catalog/views.html
+- crio a view category
+	def category(request):
+		return render(request, 'catalog/category.html')
+
+crio o template:
+catalog/templates/catalog/category.html
+
+url amigável parametrizada
+([\w_-]+)
+url(r'^([\w_-]+)/$', views.category, name='category'),
+	na prática, o django vai chamar:
+category(request, 'design')
+
+
+url(r'^(?P<slug>[\w_-]+)/$'
+	na prática, o django vai chamar:
+category(request, slug='design')
