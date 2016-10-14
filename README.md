@@ -9,10 +9,10 @@ https://github.com/Josue23/djangoecommerce.git
   ###### virtualenv env -p python3
 
 ###### Linux
-  ###### source env/bin/activate
+    <p>source env/bin/activate</p>
 
 ###### Windows
-  ###### env\Scripts\activate.bat
+  <p>env\Scripts\activate.bat</p>
 
 
 ### Instale as dependencias
