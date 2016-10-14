@@ -3,18 +3,18 @@
 ### Instalação
 ### Clone o projeto
 https://github.com/Josue23/djangoecommerce.git
-cd djangoecommerce
+###### cd djangoecommerce
 
 ### virtualenv
-  virtualenv env -p python3
+  ###### virtualenv env -p python3
 
-Linux
-  source env/bin/activate
+###### Linux
+  ###### source env/bin/activate
 
-Windows
-  env\Scripts\activate.bat
+###### Windows
+  ###### env\Scripts\activate.bat
 
 
 ### Instale as dependencias
-  pip install -r requirements.txt
-  python manage.py runserver
+  ###### pip install -r requirements.txt
+  ###### python manage.py runserver
