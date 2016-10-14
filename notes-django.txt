@@ -1,4 +1,4 @@
-sprint 1
+SPRINT 1
 	layout do projeto, baseado no bootstrap
 	- pagina inicial
 	- contato
@@ -279,3 +279,217 @@ $ git push heroku master
 
 ====================================================
 ====================================================
+====================================================
+====================================================
+SPRINT 2
+Nova app (Catalog)
+essa app vai armazenar as informações de cadastro do produtos e categorias 
+
+vamos criar nesse modulo
+- app Catalog
+- modelagem de produtos
+- modelagem da categoria associada a um produto
+- cadastrar produtos, categorias e fazer pequenas customizações através do django admin
+
+django admin é uma aplicação do django que serve para cadastrosem forma de CRUD
+
+====================================================
+abordagem para que as configurações funcionem tanto em ambiente de desenvolvimento quanto em ambiente de produção
+
+opção 1
+local_settings.py
+- é um arquivo que vai sobreescrever algumas configurações de produção e vai ser adicionado ao .gitignore
+
+settings.py tem as configurações gerais de ambiente de produção
+local_settings.py tem as configurações de ambiente de desenvolvimento
+
+o local_settings.py está no gitignore e não subir para o repositório mas o local_settings.py.example vai poder subir para o repositório
+====================================================
+AULA 15 - Criando a app catalog
+$ ./manage.py migrate
+- busca todos os modelos dentro do meu projeto e vai criar as tabelas associadas a esses modelos
+- o django gera arquivos de migração que são coisas que devem ser inseridas no banco de dados de acordo com a sua modelagem, sua classe
+$ ./manage.py migrate quando rodado pela primeira vez, cria o db.sqlite3 com as tabelas iniciais
+
+pedaço da saída do comendo:
+$ ./manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, sessions, contenttypes, auth
+Running migrations:
+  Rendering model states... DONE
+  Applying contenttypes.0001_initial... OK
+
+Criando a app catalog
+./manage.py startapp catalog
+- abro o arquivo:
+catalog/models.py que é o arquivo dos models associados à app catalog
+- crio os modelos que são as classes que representam as tabelas do nosso banco de dados da app catalog
+
+class Category(models.Model):
+- toda classe que herdar de models.Model vai ser um modelo que representa uma tabela no banco de dados
+- exemplo de nome de campo na tabela
+name = models.CharField('nome') representa campo de texto
+
+- depois de eu criar os meus modelos eu adiciono a minha app 'catalog' nas apps instaladas em settings.py
+
+- adicionando os modelos no meu banco de dados:
+- gera um arquivo de migração
+$ ./manage.py makemigrations
+Migrations for 'catalog':
+  0001_initial.py:
+    - Create model Category
+    - Create model Product
+
+criou o arquivo 0001_initial.py
+
+agora a migração de verdade
+$ ./manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, catalog, contenttypes, auth, sessions
+Running migrations:
+  Rendering model states... DONE
+  Applying catalog.0001_initial... OK
+
+====================================================
+====================================================
+aula16-visualizando-tabelas-no-banco-de-dados.mp4
+
+
+====================================================
+====================================================
+aula17-acessando-ORM-atraves-do-shell-do-django
+
+$ pip install  ipython
+$ ./manage.py shell
+
+In [1]: from catalog.models import Product, Category 
+
+- todo model do django tem uma referencia para objects que é um manager intermediário entre a consulta do bando e o meu modelo
+- com o objects(manager) eu consigo acessar as minhas consultas(QuerySet)
+
+O sistema de ORM do django tem tres principais componentes:
+	- model, que criamos
+	- manager, este aqui
+		-	In [2]: Category.objects
+			Out[2]: <django.db.models.manager.Manager at 0x7f87882b29b0>
+				- é criado de forma dinamica
+	- In [3]: Category.objects.all()
+		- como se fosse o SELECT ALL, vai selecionar todos os objects
+
+	In [3]: type(Category.objects.all())
+	Out[3]: django.db.models.query.QuerySet
+
+	Category é um model
+	In [4]: Category
+	Out[4]: catalog.models.Category
+
+	.objects é do tipo manager
+	In [5]: Category.objects
+	Out[5]: <django.db.models.manager.Manager at 0x7f87882b29b0>
+
+- chamada de uma QuerySet para criar um objeto
+In [7]: Category.objects.create()
+
+criando a categoria Programação
+In [7]: Category.objects.create(name='Programação', slug='programacao')
+Out[7]: <Category: Category object>
+
+In [8]: Category.objects.all()   # já tenho um objeto na saída
+Out[8]: [<Category: Category object>]
+
+pegando a primeira categoria, parecido com o 1º índice em python
+In [11]: cat = Category.objects.all()[0]
+
+In [12]: cat
+Out[12]: <Category: Category object>
+
+- criando meu produto direto pelo ORM do django
+In [13]: Product.objects.create(name='Curso de Django', slug='curso-de-django', category=cat, price=100 )
+Out[13]: <Product: Product object>
+
+- exibindo o produto
+In [14]: Product.objects.all()
+Out[14]: [<Product: Product object>]
+
+
+- query se existe algum produto que contém 'django' no nome
+In [16]: Product.objects.filter(name__icontains='django')
+Out[16]: [<Product: Product object>]
+
+pegando apenas o slug curso-de-django
+	- o get retorna apenas um item
+In [21]: Product.objects.get(slug='curso-de-django')
+Out[21]: <Product: Product object>
+
+====================================================
+====================================================
+aula18-djangoAdmin
+
+arquivo catalog/admin.py
+- insere as linhas
+	from .models import Product, Category
+	admin.site.register(Category)
+	admin.site.register(Product)
+
+
+====================================================
+====================================================
+aula19-customizando-django-admin
+
+dentro de cada aplicãção tem o arquivo apps.py
+
+altero o arquivo catalog/apps.py
+adiciono:
+	class CatalogConfig(AppConfig):
+	    name = 'catalog'
+	    verbose_name = 'Catálogo'
+
+altero catalog/__init__.py
+	default_app_config = 'catalog.apps.CatalogConfig'
+
+
+====================================================
+====================================================
+aula20-listando-as-categorias
+
+core/views.py
+adiciono:
+from catalog.models import Category
+
+- crio context na view index
+def index(request):
+	context = {
+	'categories': Category.objects.all()
+	}
+	return render(request, 'index.html', context)
+- render é um atalho
+- render sendo um atalho, precisa de request, template (index.html) e um dicionário que é o context que vai renderizar dentro de index.html
+
+- no core/templates/index.html só tem o miolo do site
+- no core/templates/base.html tem os menus de nav com categorias, onde posso alterar
+
+- quando eu preciso que alguma informação do meu banco, do meu sistema esteja disponível em todos os templates, a melhor coisa a se fazer é:
+	usar o context_processors que está no settings.py, TEMPLATES
+	- context_processors são fuñções que são chamadas toda vez que o template for renderizado
+
+- vou criar na minha app catalog o arquivo:
+catalog/context_processors.py
+
+
+
+====================================================
+====================================================
+aula21-listando-os-produtos
+
+o sistema de templates do django procura uma pasta chamada templates dentro de cada app no meu projeto
+
+- crio a pasta catalog/templates
+- crio outra pasta catalog/templates/catalog
+
+vamos usar url include, separar as urls por módulo
+- dentro de cada app:
+	- crio urls.py
+	- coloco somente as urls da app
+catalog/urls.py
+
+

@@ -1,1 +1,7 @@
 *.pdf
+
+db.sqlite3
+
+local_settings.py
+
+notes-django.txt
