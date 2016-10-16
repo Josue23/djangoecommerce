@@ -5,17 +5,17 @@
 {% endblock  %}
 
 {% block container %}
-			<div class="page-header">
-		  <h1>{{ product }}</h1>
-		</div>
-		<div class="row">
-		  <div class="col-sm-4">
-			  <a href="#" class="thumbnail">
+	<div class="page-header">
+		<h1>{{ product }}</h1>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<a href="#" class="thumbnail">
 				  <img src="http://placehold.it/350x250" alt="" />
-			  </a>
-		  </div>
-		  <div class="col-sm-8">
-		  	{{ product.description|linebreaks }}
-		  </div>
+			</a>
 		</div>
+		<div class="col-sm-8">
+			{{ product.description|linebreaks }}
+		</div>
+	</div>
 {% endblock %}

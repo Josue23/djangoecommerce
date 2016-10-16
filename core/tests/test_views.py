@@ -8,7 +8,7 @@ chamo a função reverse para usar url nomeadas nos testes
 '''
 from django.core.urlresolvers import reverse
 
-
+# testes unitários na "/core/templates/index.html"
 class IndexViewTestCase(TestCase):
 
 	# método setUp vai ser executado para cada teste
