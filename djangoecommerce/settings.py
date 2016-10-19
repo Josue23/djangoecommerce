@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # libs
+    'widget_tweaks',
+    # apps
     'core',
     'catalog',
 ]
@@ -129,7 +131,7 @@ STATIC_URL = '/static/'
 
 
 # alterando as configurações de banco de dados padrão pelas configurações que o heroku fornece
-# - para poder rodar no postgresql do heroku 
+# - para poder rodar no postgresql do heroku
 # Update databases configuration with $DATABASE_URL.
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
@@ -146,7 +148,6 @@ ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 # STATIC_ROOT  só vai ser usado depois
-
 
 
 try:
