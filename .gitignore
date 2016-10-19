@@ -1,4 +1,5 @@
 *.pdf
+*.rar
 
 db.sqlite3
 
